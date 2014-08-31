@@ -12,12 +12,6 @@ describe Traxis::Response do
       fake.stub(:status) { 200 }
     end
 
-    # let(:fake_response_definition_) do
-    #   response_definition =
-    #   response_definition.inherited
-    #   response_definition
-    # end
-
     it "registers the response definition" do
       Traxis.should_receive(:register_response)
       fake_response_klass

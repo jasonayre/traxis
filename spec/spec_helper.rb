@@ -9,13 +9,9 @@ require 'simplecov'
 
 require 'praxis'
 require 'traxis'
-
-
 require 'rack/test'
-
 require 'rspec/its'
 require 'rspec/collection_matchers'
-
 require 'pry'
 
 Dir["#{File.dirname(__FILE__)}/support/*.rb"].each do |file|
