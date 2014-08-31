@@ -1,11 +1,11 @@
-require_relative 'spec_media_types'
+require_relative 'media_types'
 
 class PeopleResource
   include Praxis::ResourceDefinition
 
   description 'People resource'
 
-  media_type Person
+  media_type ::MediaTypes::Person
 
   version '1.0'
 
@@ -18,6 +18,20 @@ class PeopleResource
     routing do
       get ''
     end
+  end
+
+  action :create do
+    description 'create description'
+    routing do
+      post ''
+    end
+
+    payload do
+      attribute :name, String, required: true
+    end
+
+    response :resource_created, media_type: 'application/json'
+    response :resource_error
   end
 
   action :show do

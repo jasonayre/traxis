@@ -32,6 +32,10 @@ module Traxis
         collection_options.merge!(collection)
         resource_options.merge!(resource)
       end
+
+      def resource_class
+        resource_options[:class]
+      end
     end
 
     def collection_options

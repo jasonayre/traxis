@@ -21,7 +21,7 @@ module Traxis
   end
 
   def self.register_responses
-    ::Traxis::Response.subclasses.each do |klass|
+    ::Traxis::Responses::Base.subclasses.each do |klass|
       ::Traxis.register_response(klass)
     end
   end

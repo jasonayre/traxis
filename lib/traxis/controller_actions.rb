@@ -2,14 +2,14 @@ module Traxis
   module ControllerActions
     def create(**params)
       if create_resource.errors.any?
-        ::Traxis::Responses::ResourceErrors.new(:body => serialized_resource, :json_root => collection_options[:json_root], :errors => resource.errors)
+        ::Traxis::Responses::ResourceError.new(:body => serialized_resource, :json_root => resource_options[:json_root], :errors => resource.errors)
       else
-        ::Traxis::Responses::ResourceCreated.new(:body => serialized_resource, :json_root => collection_options[:json_root])
+        ::Traxis::Responses::ResourceCreated.new(:body => serialized_resource, :json_root => resource_options[:json_root])
       end
     end
 
     def destroy(id:)
-      ::Traxis::Responses::ResourceDeleted.new(:body => serialized_resource, :json_root => collection_options[:json_root])
+      ::Traxis::Responses::ResourceDeleted.new(:body => serialized_resource, :json_root => resource_options[:json_root])
     end
 
     def index(**params)
@@ -22,9 +22,9 @@ module Traxis
 
     def update(id:, **params)
       if update_resource.errors.any?
-        ::Traxis::Responses::ResourceErrors.new(:body => serialized_resource, :json_root => collection_options[:json_root], :errors => resource.errors)
+        ::Traxis::Responses::ResourceError.new(:body => serialized_resource, :json_root => resource_options[:json_root], :errors => resource.errors)
       else
-        ::Traxis::Responses::Resource.new(:body => serialized_resource, :json_root => collection_options[:json_root])
+        ::Traxis::Responses::Resource.new(:body => serialized_resource, :json_root => resource_options[:json_root])
       end
     end
   end

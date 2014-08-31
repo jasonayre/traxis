@@ -1,39 +1,34 @@
 module Traxis
   module Responses
-    class Resource < ::Traxis::Response
-      self.response_name = :resource
-      self.status = 200
+    class Base < ::Praxis::Response
+    end
 
-      attr_accessor :json_root
+    class Unauthorized < ::Traxis::Responses::Base
+      include ::Traxis::Response::JSON
+      include ::Traxis::Response::Meta
+      include ::Traxis::Response::Errors
 
-      def initialize(json_root:'resource', **args)
-        @json_root = json_root
+      self.status = 401
 
-        super(**args)
+      def response_body
+        @response_body = super
+        @response_body[:meta][:errors] << "You are not authorized to do that!"
+        @response_body
       end
 
-      def handle
-        headers['Content-Type'] = 'application/json'
-      end
-
-      def encode!
-        @body = @body.to_json
-      end
-
-      # Assign body to response body, allows for super extending the response body
-      # for clean composition
       def format!
-        response_body[json_root] = @body
         @body = response_body
         @body
       end
-
-      def response_body
-        @response_body ||= {}
-      end
     end
 
-    class ResourceCreated < Resource
+    class Resource < ::Traxis::Responses::Base
+      include ::Traxis::Response::JSON
+      self.response_name = :resource
+      self.status = 200
+    end
+
+    class ResourceCreated < ::Traxis::Responses::Resource
       self.response_name = :resource_created
       self.status = 201
     end
@@ -48,47 +43,21 @@ module Traxis
       self.status = 422
 
       def initialize(errors:[], **args)
-        super(**args)
-
         @errors = errors
+        super(**args)
       end
 
       def response_body
-        super[:errors] ||= @errors
+        super[:errors] = @errors
       end
     end
 
-    class Collection < ::Traxis::Response
+    class Collection < ::Traxis::Responses::Base
+      include ::Traxis::Response::JSON
+      include ::Traxis::Response::Meta
+
       self.response_name = :collection
       self.status = 200
-
-      attr_accessor :json_root
-
-      def initialize(json_root:'records', **args)
-        @json_root = json_root
-
-        super(**args)
-      end
-
-      def handle
-        headers['Content-Type'] = 'application/json'
-      end
-
-      def encode!
-        @body = @body.to_json
-      end
-
-      # Assign body to response body, allows for super extending the response body
-      # for clean composition
-      def format!
-        response_body[json_root] = @body
-        @body = response_body
-        @body
-      end
-
-      def response_body
-        @response_body ||= {}
-      end
     end
   end
 end

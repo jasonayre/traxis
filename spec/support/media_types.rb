@@ -1,46 +1,55 @@
-class Person < Praxis::MediaType
-  attributes do
-    attribute :id, Integer
-    attribute :name, String, example: /[:name:]/
-    attribute :href, String, example: proc { |person| "/people/#{person.id}" }
+module MediaTypes
+  class People < Praxis::MediaTypeCollection
+    identifier 'application/json'
+
+    view :default do
+      @contents.merge!(@schema.attributes)
+    end
   end
 
-  view :default do
-    attribute :id
-    attribute :name
-  end
-
-  view :link do
-    attribute :id
-    attribute :name
-    attribute :href
-  end
-end
-
-
-class Address < Praxis::MediaType
-  identifier 'application/json'
-
-  description 'Address MediaType'
-
-  attributes do
-    attribute :id, Integer
-    attribute :name, String
-
-    attribute :owner, Person
-
-    links do
-      link :owner
-      link :super, Person, using: :manager
+  class Person < Praxis::MediaType
+    attributes do
+      attribute :id, Integer
+      attribute :name, String, example: /[:name:]/
+      attribute :href, String, example: proc { |person| "/people/#{person.id}" }
     end
 
+    view :default do
+      attribute :id
+      attribute :name
+    end
+
+    view :link do
+      attribute :id
+      attribute :name
+      attribute :href
+    end
   end
 
-  view :default do
-    attribute :id
-    attribute :name
-    attribute :owner
+  class Address < Praxis::MediaType
+    identifier 'application/json'
 
-    attribute :links
+    description 'Address MediaType'
+
+    attributes do
+      attribute :id, Integer
+      attribute :name, String
+
+      attribute :owner, Person
+
+      links do
+        link :owner
+        link :super, Person, using: :manager
+      end
+
+    end
+
+    view :default do
+      attribute :id
+      attribute :name
+      attribute :owner
+
+      attribute :links
+    end
   end
 end
