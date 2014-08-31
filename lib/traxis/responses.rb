@@ -33,12 +33,12 @@ module Traxis
       self.status = 201
     end
 
-    class ResourceDeleted < Resource
+    class ResourceDeleted < ::Traxis::Responses::Resource
       self.response_name = :resource_deleted
       self.status = 204
     end
 
-    class ResourceError < Resource
+    class ResourceError < ::Traxis::Responses::Resource
       self.response_name = :resource_error
       self.status = 422
 

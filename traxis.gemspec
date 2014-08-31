@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Traxis::VERSION
   spec.authors       = ["Jason Ayre"]
   spec.email         = ["jasonayre@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = %q{Strongly opinionated restful api convention > config for praxis}
+  spec.description   = %q{Making Praxis more like rails with active record, inherited resources inspired conventions}
+  spec.homepage      = "http://github.com/jasonayre/traxis"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")

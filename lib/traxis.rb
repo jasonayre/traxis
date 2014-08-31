@@ -3,6 +3,28 @@ require "active_support"
 require "active_support/all"
 
 module Traxis
+  def self.bootstrap!
+    load_concerns if concerns.any?
+    load_responses if responses.any?
+    register_responses
+  end
+
+  def self.load_concerns
+    concerns.each do |path|
+      require path
+    end
+  end
+
+  def self.concerns
+    @concerns ||= ::Dir[root.join('app', '**', '*concerns', '*.rb')]
+  end
+
+  def self.load_responses
+    responses.each do |path|
+      require path
+    end
+  end
+
   # Because praxis is using inherited hook,responses arent registered
   # i.e. response.response_name is nil, as rest of class
   # (where assignment is made) hasn't been loaded yet
@@ -25,10 +47,18 @@ module Traxis
       ::Traxis.register_response(klass)
     end
   end
+
+  def self.responses
+    @responses ||=::Dir[root.join('app', '**', '*concerns', '*.rb')]
+  end
+
+  def self.root
+    ::Praxis::Application.instance.root
+  end
 end
 
 require "traxis/response"
 
-::Traxis.register_responses
+::Traxis.bootstrap!
 
 require "traxis/controller"
