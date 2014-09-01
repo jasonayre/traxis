@@ -9,6 +9,10 @@ module Traxis
     register_responses
   end
 
+  def self.controllers
+    @controllers ||=::Dir[root.join('app', 'controllers', '**', '*_controller', '*.rb')]
+  end
+
   def self.load_concerns
     concerns.each do |path|
       require path
@@ -17,6 +21,12 @@ module Traxis
 
   def self.concerns
     @concerns ||= ::Dir[root.join('app', '**', '*concerns', '*.rb')]
+  end
+
+  def self.eager_require_directory(*args)
+    ::Dir[::Traxis.root.join(*args)].each do |path|
+      require path
+    end
   end
 
   def self.load_responses
