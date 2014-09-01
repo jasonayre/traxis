@@ -3,6 +3,12 @@ module Traxis
     class Base < ::Praxis::Response
     end
 
+    class Ok < ::Traxis::Responses::Base
+      include ::Traxis::Response::JSON
+
+       self.status = 200
+    end
+
     class Unauthorized < ::Traxis::Responses::Base
       include ::Traxis::Response::JSON
       include ::Traxis::Response::Meta
