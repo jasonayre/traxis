@@ -3,7 +3,17 @@ module Traxis
     protected
 
     def association_chain
-      @association_chain ||= begin_of_association_chain.all
+      @association_chain ||= begin
+        if begin_of_association_chain.kind_of?(::ActiveRecord::Relation)
+          begin_of_association_chain.all
+        else
+          begin_of_association_chain
+        end
+      end
+    end
+
+    def begin_of_association_chain_is_relation?
+      begin_of_association_chain.kind_of?(::ActiveRecord::Relation)
     end
 
     def assign_object_attributes(object, attribute_hash)
@@ -18,8 +28,29 @@ module Traxis
       self.class.resource_options[:class]
     end
 
+    def build_resource
+      if association_chain != resource_class
+        association_chain.__send__(collection_relation_name).new(payload_attributes)
+      else
+        association_chain.new(payload_attributes)
+      end
+    end
+
+
+    ### If begin of association chain is an instance of ar model, i.e. current_user
+    ### send the collection relation name, i.e. current_user.posts.all
     def collection
-      @collection ||= association_chain
+      @collection ||= begin
+        unless begin_of_association_chain.respond_to?(:all)
+          association_chain.__send__(collection_relation_name).all
+        else
+          association_chain.all
+        end
+      end
+    end
+
+    def collection_relation_name
+      @collection_relation_name ||= resource_class.name.demodulize.underscore.pluralize
     end
 
     def collection_serializer_class
@@ -45,7 +76,7 @@ module Traxis
     def resource
       @resource ||= begin
         if request.action.name == :create
-          association_chain.new(payload_attributes)
+          build_resource
         elsif request.action.name == :update
           assign_object_attributes(resource_query_result, payload_attributes)
         else
