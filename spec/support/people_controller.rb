@@ -6,7 +6,7 @@ class PeopleController
   implements ::PeopleResource
 
   handles ::Person, :collection => {
-                      :serializer => ::MediaTypes::Person,
+                      :serializer => ::MediaTypes::People,
                       :json_root => "people"
                     },
                     :resource => {

@@ -69,6 +69,6 @@ end
 
 require "traxis/response"
 
-::Traxis.bootstrap!
+::Traxis.bootstrap! if ::Traxis.root
 
 require "traxis/controller"

@@ -12,10 +12,6 @@ module Traxis
       end
     end
 
-    def begin_of_association_chain_is_relation?
-      begin_of_association_chain.kind_of?(::ActiveRecord::Relation)
-    end
-
     def assign_object_attributes(object, attribute_hash)
       attribute_hash.each_pair do |k,v|
         object.__send__("#{k}=", v)
@@ -61,6 +57,14 @@ module Traxis
       save_resource
     end
 
+    def end_of_association_chain
+      :all
+    end
+
+    def method_for_find
+      resource_options[:finder]
+    end
+
     def params
       @params ||= request.params.attributes
     end
@@ -80,17 +84,20 @@ module Traxis
         elsif request.action.name == :update
           assign_object_attributes(resource_query_result, payload_attributes)
         else
-          association_chain.__send__(resource_options[:finder], params[resource_options[:finder_param]])
+          resource_query_result
         end
       end
     end
 
-    def resource_finder
-      :find
-    end
-
     def resource_query_result
-      @resource_query_result ||= association_chain.__send__(resource_options[:finder], params[resource_options[:finder_param]])
+      @resource_query_result ||= begin
+        unless association_chain.respond_to?(method_for_find)
+          association_chain.__send__(collection_relation_name)
+                           .__send__(method_for_find, params[resource_options[:finder_param]])
+        else
+          association_chain.__send__(method_for_find, params[resource_options[:finder_param]])
+        end
+      end
     end
 
     def serialized_collection
@@ -112,6 +119,8 @@ module Traxis
         request.query.map do |k,v|
           collection.__send__("#{k}", *v)
         end
+
+        collection.__send__(end_of_association_chain)
       end
     end
 
