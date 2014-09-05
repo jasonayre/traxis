@@ -1,12 +1,13 @@
 require 'traxis/controller_helpers'
 require 'traxis/controller_actions'
-
+require 'traxis/controller_concerns'
 module Traxis
   module Controller
     extend ::ActiveSupport::Concern
     include ::Praxis::Controller
     include ::Traxis::ControllerHelpers
     include ::Traxis::ControllerActions
+    include ::Traxis::ControllerConcerns::Core
 
     included do
       class_attribute :collection_options
