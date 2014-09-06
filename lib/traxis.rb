@@ -1,6 +1,8 @@
 require "traxis/version"
 require "active_support"
 require "active_support/all"
+require "traxis/response"
+require "traxis/responses"
 
 module Traxis
   def self.bootstrap!
@@ -59,15 +61,13 @@ module Traxis
   end
 
   def self.responses
-    @responses ||=::Dir[root.join('app', '**', '*concerns', '*.rb')]
+    @responses ||=::Dir[root.join('app', '**', '*responses', '*.rb')]
   end
 
   def self.root
     ::Praxis::Application.instance.root
   end
 end
-
-require "traxis/response"
 
 ::Traxis.bootstrap! if ::Traxis.root
 

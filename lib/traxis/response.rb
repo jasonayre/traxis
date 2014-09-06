@@ -53,5 +53,3 @@ module Traxis
     end
   end
 end
-
-require 'traxis/responses'
