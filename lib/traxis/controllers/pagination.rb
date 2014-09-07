@@ -27,6 +27,10 @@ module Traxis
           })
         end
 
+        def collection_response_args
+          super.merge!(:pagination_meta => pagination_meta)
+        end
+
         def page_param_key
           self.class.collection_options[:page_param]
         end
@@ -37,6 +41,8 @@ module Traxis
 
         def pagination_meta
           {
+            :page => paginated_collection.current_page,
+            :per => paginated_collection.per_page,
             :total_entries => paginated_collection.total_entries
           }
         end

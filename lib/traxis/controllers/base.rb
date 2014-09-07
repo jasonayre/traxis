@@ -123,7 +123,6 @@ module Traxis
       end
 
       def serialized_collection
-        binding.pry
         collection_serializer_class.new(collection_query_result)
       end
 
@@ -134,7 +133,6 @@ module Traxis
       def serialized_resource
         serializer_class.new(resource)
       end
-
 
       def save_resource
         resource.save

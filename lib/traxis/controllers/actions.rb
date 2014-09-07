@@ -1,5 +1,5 @@
 module Traxis
-  module Controllers    
+  module Controllers
     module Actions
       def create(**params)
         if create_resource.errors.any?
@@ -14,7 +14,7 @@ module Traxis
       end
 
       def index(**params)
-        ::Traxis::Responses::Collection.new(:body => serialized_collection, :json_root => collection_options[:json_root])
+        collection_response
       end
 
       def show(id:)

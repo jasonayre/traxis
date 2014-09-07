@@ -64,6 +64,19 @@ module Traxis
 
       self.response_name = :collection
       self.status = 200
+
+      def initialize(pagination_meta:nil, links_meta:nil, **args)
+        @pagination_meta = pagination_meta
+
+        super(**args)
+      end
+
+      def response_body
+        @response_body = super
+
+        @response_body[:meta][:pagination] = @pagination_meta if @pagination_meta
+        @response_body
+      end
     end
   end
 end

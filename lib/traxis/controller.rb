@@ -1,7 +1,7 @@
-# require 'traxis/controller_helpers'
 require 'traxis/controllers/base'
 require 'traxis/controllers/actions'
 require 'traxis/controllers/pagination'
+require 'traxis/controllers/action_responses'
 
 module Traxis
   module Controller
@@ -9,6 +9,7 @@ module Traxis
     include ::Praxis::Controller
     include ::Traxis::Controllers::Base
     include ::Traxis::Controllers::Actions
+    include ::Traxis::Controllers::ActionResponses
 
     COLLECTION_ACTIONS = [:index, :search]
     MEMBER_ACTIONS = [:show, :create, :update, :destroy, :delete, :add, :remove]
