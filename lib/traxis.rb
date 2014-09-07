@@ -1,10 +1,19 @@
 require "traxis/version"
 require "active_support"
 require "active_support/all"
+require "will_paginate"
+require 'will_paginate/active_record'
+require "traxis/config"
 require "traxis/response"
 require "traxis/responses"
 
 module Traxis
+  class << self
+    attr_accessor :config
+  end
+
+  self.config = ::Traxis::Config.new
+
   def self.bootstrap!
     load_concerns if concerns.any?
     load_responses if responses.any?
