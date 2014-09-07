@@ -22,8 +22,8 @@ module Traxis
 
         def collection_query_result
           super.paginate({
-            :page => params[page_param_key],
-            :per_page => params[per_page_param_key]
+            :page => pagination_params[page_param_key],
+            :per_page => pagination_params[per_page_param_key]
           })
         end
 
@@ -31,12 +31,22 @@ module Traxis
           self.class.collection_options[:page_param]
         end
 
+        def paginated_collection
+          @paginated_collection ||= collection_query_result
+        end
+
+        def pagination_meta
+          {
+            :total_entries => paginated_collection.total_entries
+          }
+        end
+
         def per_page_param_key
           self.class.collection_options[:per_page_param]
         end
 
         def pagination_params
-          @pagination_params ||= query_params.extract(page_param_key, per_page_param_key)
+          @pagination_params ||= query_params.extract!(page_param_key, per_page_param_key)
         end
       end
     end

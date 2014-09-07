@@ -51,7 +51,7 @@ module Traxis
 
       def collection_query_result
         @collection_query_result ||= begin
-          collection_with_search_scopes.all
+          collection_with_search_scopes
         end
       end
 
@@ -63,7 +63,7 @@ module Traxis
             collection.__send__("#{k}", *v) if collection.respond_to?(k)
           end
 
-          collection
+          collection.all
         end
       end
 
@@ -123,6 +123,7 @@ module Traxis
       end
 
       def serialized_collection
+        binding.pry
         collection_serializer_class.new(collection_query_result)
       end
 
